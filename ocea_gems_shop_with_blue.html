@@ -1,0 +1,353 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+h2.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.page{background:#FAFAF7;font-family:system-ui,sans-serif}
+.ann{background:#0A0F2C;text-align:center;padding:6px;font-size:11px;color:#C9A84C;font-weight:500;letter-spacing:.05em}
+.nav{background:#fff;border-bottom:2px solid #1A2B8F;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px}
+.nav-left{display:flex;align-items:center;gap:8px}
+.logo-box{width:36px;height:36px;border-radius:7px;background:#EEF2FF;border:1px solid #b5d4f4;display:flex;align-items:center;justify-content:center}
+.brand-name{font-size:13px;font-weight:600;color:#1C1610;letter-spacing:.04em;font-family:Georgia,serif}
+.brand-sub{font-size:8px;color:#1A2B8F;letter-spacing:.12em;text-transform:uppercase;display:block;font-weight:500}
+.nav-links{display:flex;gap:1px}
+.nl{padding:5px 10px;font-size:12px;color:#6B5F4A;border-radius:6px;cursor:pointer;transition:all .15s}
+.nl.a{color:#1A2B8F;font-weight:600;background:#EEF2FF}
+.nl:hover{color:#1A2B8F;background:#EEF2FF}
+.nav-icons{display:flex;gap:3px;align-items:center}
+.ib{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;background:transparent;color:#6B5F4A;transition:all .15s}
+.ib:hover{background:#EEF2FF;color:#1A2B8F}
+.cart-b{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;border:1.5px solid #1A2B8F;background:#EEF2FF;color:#1A2B8F;position:relative;cursor:pointer;transition:all .15s}
+.cart-b:hover{background:#1A2B8F;color:#fff}
+.cbadge{position:absolute;top:-4px;right:-4px;width:15px;height:15px;background:#C9A84C;border-radius:50%;font-size:8px;font-weight:700;color:#fff;display:flex;align-items:center;justify-content:center;border:1.5px solid #fff}
+.vdiv{width:1px;height:18px;background:#E2DCCE;margin:0 3px}
+.breadcrumb{padding:9px 24px;font-size:11px;color:#9E9080;display:flex;gap:6px;align-items:center;border-bottom:1px solid #E2DCCE;background:#fff}
+.bc-sep{color:#E2DCCE}
+.bc-cur{color:#1A2B8F;font-weight:600}
+.shop-wrap{display:flex}
+.sidebar{width:210px;flex-shrink:0;background:#fff;border-right:1px solid #E2DCCE;padding:16px;min-height:600px}
+.sb-section{margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid #E2DCCE}
+.sb-section:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.sb-title{font-size:11px;font-weight:600;color:#0A0F2C;letter-spacing:.07em;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.sb-clear{font-size:10px;color:#C9A84C;cursor:pointer;font-weight:400;letter-spacing:0;text-transform:none}
+.cb-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;cursor:pointer}
+.cb-row:last-child{margin-bottom:0}
+.cb{width:14px;height:14px;border-radius:3px;border:1.5px solid #b5d4f4;background:#EEF2FF;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.cb.on{background:#1A2B8F;border-color:#1A2B8F}
+.cb-tick{display:none;width:8px;height:8px}
+.cb.on .cb-tick{display:block}
+.cb-label{font-size:12px;color:#6B5F4A;flex:1}
+.cb-count{font-size:10px;color:#1A2B8F;background:#EEF2FF;padding:1px 5px;border-radius:8px;border:1px solid #b5d4f4}
+.price-row{display:flex;gap:6px;margin-top:8px}
+.price-inp{flex:1;padding:5px 8px;border:1px solid #b5d4f4;border-radius:6px;font-size:11px;color:#1C1610;background:#EEF2FF;text-align:center;width:0}
+.price-sep{font-size:11px;color:#9E9080;align-self:center}
+.rating-row{display:flex;gap:2px;align-items:center;margin-bottom:6px;cursor:pointer}
+.stars{display:flex;gap:1px}
+.star{font-size:13px;color:#C9A84C}
+.star.e{color:#E2DCCE}
+.rating-label{font-size:11px;color:#6B5F4A;margin-left:4px}
+.main{flex:1;padding:16px;min-width:0}
+.page-header{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #E2DCCE}
+.page-h{font-size:18px;font-weight:500;color:#0A0F2C;font-family:Georgia,serif;margin-bottom:2px}
+.page-sub{font-size:12px;color:#6B5F4A}
+.cat-scroll{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.cat-pill{padding:5px 12px;border-radius:20px;border:1.5px solid #E2DCCE;font-size:11px;color:#6B5F4A;cursor:pointer;background:#fff;white-space:nowrap;transition:all .15s}
+.cat-pill.on{background:#1A2B8F;border-color:#1A2B8F;color:#fff}
+.cat-pill:hover:not(.on){border-color:#1A2B8F;color:#1A2B8F;background:#EEF2FF}
+.active-filters{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.af-label{font-size:11px;color:#9E9080}
+.af-tag{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;background:#EEF2FF;border:1px solid #b5d4f4;font-size:11px;color:#0C447C;cursor:pointer}
+.af-x{font-size:13px;line-height:1;opacity:.5}
+.af-clear{font-size:11px;color:#C9A84C;cursor:pointer;margin-left:4px}
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.result-count{font-size:12px;color:#9E9080}
+.result-count span{color:#0A0F2C;font-weight:600}
+.toolbar-right{display:flex;gap:8px;align-items:center}
+.sort-sel{padding:5px 10px;border:1.5px solid #b5d4f4;border-radius:7px;font-size:12px;color:#1A2B8F;background:#EEF2FF;cursor:pointer;font-weight:500}
+.view-btns{display:flex;gap:2px}
+.vb{width:28px;height:28px;border-radius:6px;border:1px solid #E2DCCE;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#9E9080}
+.vb.on{background:#1A2B8F;border-color:#1A2B8F;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.pcard{background:#fff;border:1px solid #E2DCCE;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.pcard:hover{border-color:#1A2B8F;border-width:1.5px}
+.pcard-img{height:130px;background:#F5F0E8;position:relative;display:flex;align-items:center;justify-content:center;border-bottom:1px solid #E2DCCE}
+.pcard-badge{position:absolute;top:7px;left:7px;font-size:9px;font-weight:600;padding:2px 6px;border-radius:8px}
+.badge-new{background:#EEF2FF;color:#0C447C;border:1px solid #b5d4f4}
+.badge-sale{background:#fff0f0;color:#a32d2d;border:1px solid #f7c1c1}
+.badge-cert{background:#FFF9EC;color:#856B00;border:1px solid #E8C96A}
+.pwish{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:50%;background:#fff;border:1px solid #E2DCCE;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;color:#9E9080;transition:all .15s}
+.pwish:hover{border-color:#1A2B8F;color:#1A2B8F;background:#EEF2FF}
+.gem-icon{width:52px;height:52px;opacity:.6}
+.pcard-body{padding:10px 11px}
+.pcard-sub{font-size:10px;color:#1A2B8F;margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em;font-weight:500}
+.pcard-name{font-size:13px;font-weight:500;color:#1C1610;margin-bottom:4px;font-family:Georgia,serif;line-height:1.3}
+.pcard-spec{font-size:10px;color:#9E9080;margin-bottom:6px}
+.pcard-rating{display:flex;gap:1px;align-items:center;margin-bottom:5px}
+.rs{font-size:10px;color:#C9A84C}
+.re{font-size:10px;color:#E2DCCE}
+.rcount{font-size:10px;color:#9E9080;margin-left:3px}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between}
+.pcard-price{font-size:14px;font-weight:600;color:#B8860B}
+.pcard-btn{padding:5px 11px;background:#1A2B8F;color:#fff;border:none;border-radius:6px;font-size:10px;font-weight:500;cursor:pointer;transition:background .15s}
+.pcard-btn:hover{background:#0C1F6B}
+.pagination{display:flex;gap:4px;justify-content:center;margin-top:20px}
+.pg-btn{width:30px;height:30px;border-radius:7px;border:1px solid #E2DCCE;background:#fff;font-size:12px;color:#6B5F4A;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.pg-btn.on{background:#1A2B8F;border-color:#1A2B8F;color:#fff}
+.pg-btn:hover:not(.on){border-color:#1A2B8F;color:#1A2B8F;background:#EEF2FF}
+svg.ic{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+svg.ic-sm{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+</style>
+
+<h2 class="sr-only">Ocea Gems shop page with sapphire blue and gold theme, left filter sidebar and product grid</h2>
+
+<div class="page">
+
+<div class="ann">Free insured shipping over $500 &nbsp;·&nbsp; GIA certified gemologists &nbsp;·&nbsp; Ethically sourced from Sri Lanka</div>
+
+<div class="nav">
+  <div class="nav-left">
+    <div class="logo-box">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+        <circle cx="14" cy="14" r="10" fill="#EEF2FF" stroke="#b5d4f4" stroke-width="1"/>
+        <polygon points="14,6 20,11 18,19 10,19 8,11" fill="#1A2B8F" opacity=".5"/>
+        <polygon points="14,6 20,11 14,14" fill="#1A2B8F" opacity=".85"/>
+        <polygon points="14,6 8,11 14,14" fill="#4A6FD4" opacity=".7"/>
+        <polygon points="14,6 20,11 14,14" fill="#C9A84C" opacity=".25"/>
+      </svg>
+    </div>
+    <div>
+      <span class="brand-name">Ocea Gems</span>
+      <span class="brand-sub">International</span>
+    </div>
+  </div>
+  <div class="nav-links">
+    <span class="nl a">Shop</span>
+    <span class="nl">Gems</span>
+    <span class="nl">Bespoke</span>
+    <span class="nl">About</span>
+    <span class="nl">Journal</span>
+  </div>
+  <div class="nav-icons">
+    <button class="ib" aria-label="Search"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <button class="ib" aria-label="Wishlist"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></button>
+    <div class="vdiv"></div>
+    <button class="cart-b" aria-label="Cart">
+      <svg class="ic-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="cbadge">3</span>
+    </button>
+  </div>
+</div>
+
+<div class="breadcrumb">
+  <span>Home</span><span class="bc-sep">›</span><span class="bc-cur">Shop &amp; collections</span>
+</div>
+
+<div class="shop-wrap">
+
+  <div class="sidebar">
+
+    <div class="sb-section">
+      <div class="sb-title">Category <span class="sb-clear" onclick="clearSection(this)">Clear</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb on"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">All jewellery</span><span class="cb-count">148</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Rings</span><span class="cb-count">42</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Necklaces</span><span class="cb-count">31</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Earrings</span><span class="cb-count">28</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Bracelets</span><span class="cb-count">19</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Loose gems</span><span class="cb-count">12</span></div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-title">Gemstone <span class="sb-clear" onclick="clearSection(this)">Clear</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb on"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Sapphire</span><span class="cb-count">38</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Ruby</span><span class="cb-count">24</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Diamond</span><span class="cb-count">31</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Emerald</span><span class="cb-count">14</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Pearl</span><span class="cb-count">11</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Alexandrite</span><span class="cb-count">7</span></div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-title">Metal</div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb on"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">White gold</span><span class="cb-count">38</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Yellow gold</span><span class="cb-count">54</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Rose gold</span><span class="cb-count">22</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">Platinum</span><span class="cb-count">19</span></div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-title">Price range</div>
+      <input type="range" min="0" max="10000" value="5000" step="100" style="width:100%;accent-color:#1A2B8F;margin-bottom:8px" oninput="document.getElementById('pmax').value='$'+Number(this.value).toLocaleString()">
+      <div class="price-row">
+        <input class="price-inp" type="text" value="$0" readonly>
+        <span class="price-sep">—</span>
+        <input class="price-inp" type="text" value="$5,000" id="pmax" readonly>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-title">Rating</div>
+      <div class="rating-row"><div class="stars"><span class="star">★★★★★</span></div><span class="rating-label">5 stars only</span></div>
+      <div class="rating-row"><div class="stars"><span class="star">★★★★</span><span class="star e">★</span></div><span class="rating-label">4 and up</span></div>
+      <div class="rating-row"><div class="stars"><span class="star">★★★</span><span class="star e">★★</span></div><span class="rating-label">3 and up</span></div>
+    </div>
+
+    <div>
+      <div class="sb-title" style="margin-bottom:10px">Certification</div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb on"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">GIA certified</span></div>
+      <div class="cb-row" onclick="toggle(this)"><div class="cb"><svg class="cb-tick" viewBox="0 0 10 10" stroke="#fff" stroke-width="2.2" fill="none" aria-hidden="true"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg></div><span class="cb-label">AGL certified</span></div>
+    </div>
+
+  </div>
+
+  <div class="main">
+
+    <div class="page-header">
+      <div class="page-h">Shop &amp; collections</div>
+      <div class="page-sub">148 certified gems and jewellery pieces — handpicked from Sri Lanka</div>
+    </div>
+
+    <div class="cat-scroll">
+      <span class="cat-pill on">All</span>
+      <span class="cat-pill" onclick="switchPill(this)">New arrivals</span>
+      <span class="cat-pill" onclick="switchPill(this)">Bestsellers</span>
+      <span class="cat-pill" onclick="switchPill(this)">On sale</span>
+      <span class="cat-pill" onclick="switchPill(this)">Under $1,000</span>
+      <span class="cat-pill" onclick="switchPill(this)">Engagement</span>
+      <span class="cat-pill" onclick="switchPill(this)">Bespoke-ready</span>
+    </div>
+
+    <div class="active-filters">
+      <span class="af-label">Active:</span>
+      <span class="af-tag">Sapphire <span class="af-x">×</span></span>
+      <span class="af-tag">White gold <span class="af-x">×</span></span>
+      <span class="af-tag">GIA certified <span class="af-x">×</span></span>
+      <span class="af-clear">Clear all</span>
+    </div>
+
+    <div class="toolbar">
+      <span class="result-count"><span>38</span> products found</span>
+      <div class="toolbar-right">
+        <select class="sort-sel">
+          <option>Sort: Featured</option>
+          <option>Price: low to high</option>
+          <option>Price: high to low</option>
+          <option>Newest first</option>
+          <option>Best rated</option>
+        </select>
+        <div class="view-btns">
+          <button class="vb on" aria-label="Grid view"><svg class="ic-sm" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></button>
+          <button class="vb" aria-label="List view"><svg class="ic-sm" viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="pcard">
+        <div class="pcard-img">
+          <span class="pcard-badge badge-new">New</span>
+          <span class="pcard-badge badge-cert" style="left:auto;right:7px">GIA</span>
+          <button class="pwish" aria-label="Wishlist">♡</button>
+          <svg class="gem-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true"><polygon points="26,6 40,18 36,44 16,44 12,18" fill="#1A2B8F" opacity=".15"/><polygon points="26,6 40,18 26,28" fill="#1A2B8F" opacity=".5"/><polygon points="26,6 12,18 26,28" fill="#4A6FD4" opacity=".4"/><polygon points="40,18 36,44 26,28" fill="#1A2B8F" opacity=".3"/><polygon points="12,18 16,44 26,28" fill="#4A6FD4" opacity=".25"/></svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-sub">Ceylon sapphire · ring</div>
+          <div class="pcard-name">Royal blue oval solitaire</div>
+          <div class="pcard-rating"><span class="rs">★★★★★</span><span class="rcount">(24)</span></div>
+          <div class="pcard-spec">2.4ct · 18k white gold · oval cut</div>
+          <div class="pcard-foot"><span class="pcard-price">$2,400</span><button class="pcard-btn">Add to cart</button></div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-img">
+          <span class="pcard-badge badge-cert">GIA</span>
+          <button class="pwish" aria-label="Wishlist">♡</button>
+          <svg class="gem-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true"><polygon points="26,6 40,18 36,44 16,44 12,18" fill="#8B0000" opacity=".15"/><polygon points="26,6 40,18 26,28" fill="#8B0000" opacity=".5"/><polygon points="26,6 12,18 26,28" fill="#D44040" opacity=".4"/><polygon points="40,18 36,44 26,28" fill="#8B0000" opacity=".3"/><polygon points="12,18 16,44 26,28" fill="#D44040" opacity=".25"/></svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-sub">Burmese ruby · pendant</div>
+          <div class="pcard-name">Pigeon blood ruby drop</div>
+          <div class="pcard-rating"><span class="rs">★★★★★</span><span class="rcount">(18)</span></div>
+          <div class="pcard-spec">1.8ct · 18k yellow gold · round</div>
+          <div class="pcard-foot"><span class="pcard-price">$3,100</span><button class="pcard-btn">Add to cart</button></div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-img">
+          <span class="pcard-badge badge-sale">–15%</span>
+          <button class="pwish" aria-label="Wishlist">♡</button>
+          <svg class="gem-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true"><polygon points="26,6 40,18 36,44 16,44 12,18" fill="#C9A84C" opacity=".18"/><polygon points="26,6 40,18 26,28" fill="#C9A84C" opacity=".5"/><polygon points="26,6 12,18 26,28" fill="#E8C96A" opacity=".4"/><polygon points="40,18 36,44 26,28" fill="#B8860B" opacity=".35"/><polygon points="12,18 16,44 26,28" fill="#E8C96A" opacity=".28"/></svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-sub">Diamond · ring</div>
+          <div class="pcard-name">Princess cut halo ring</div>
+          <div class="pcard-rating"><span class="rs">★★★★</span><span class="re">★</span><span class="rcount">(9)</span></div>
+          <div class="pcard-spec">1.2ct · platinum · princess cut</div>
+          <div class="pcard-foot"><span class="pcard-price">$4,080</span><button class="pcard-btn">Add to cart</button></div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-img">
+          <span class="pcard-badge badge-new">New</span>
+          <button class="pwish" aria-label="Wishlist">♡</button>
+          <svg class="gem-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true"><polygon points="26,6 40,18 36,44 16,44 12,18" fill="#1A5C2A" opacity=".15"/><polygon points="26,6 40,18 26,28" fill="#1A5C2A" opacity=".5"/><polygon points="26,6 12,18 26,28" fill="#3A9C5A" opacity=".4"/><polygon points="40,18 36,44 26,28" fill="#1A5C2A" opacity=".3"/><polygon points="12,18 16,44 26,28" fill="#3A9C5A" opacity=".25"/></svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-sub">Colombian emerald · earrings</div>
+          <div class="pcard-name">Vivid green drop earrings</div>
+          <div class="pcard-rating"><span class="rs">★★★★★</span><span class="rcount">(6)</span></div>
+          <div class="pcard-spec">0.9ct each · 18k white gold</div>
+          <div class="pcard-foot"><span class="pcard-price">$1,850</span><button class="pcard-btn">Add to cart</button></div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-img">
+          <span class="pcard-badge badge-cert">GIA</span>
+          <button class="pwish" aria-label="Wishlist">♡</button>
+          <svg class="gem-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true"><polygon points="26,6 40,18 36,44 16,44 12,18" fill="#6A0DAD" opacity=".14"/><polygon points="26,6 40,18 26,28" fill="#6A0DAD" opacity=".45"/><polygon points="26,6 12,18 26,28" fill="#9B59B6" opacity=".38"/><polygon points="40,18 36,44 26,28" fill="#6A0DAD" opacity=".28"/><polygon points="12,18 16,44 26,28" fill="#9B59B6" opacity=".22"/></svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-sub">Alexandrite · ring</div>
+          <div class="pcard-name">Colour-change alexandrite</div>
+          <div class="pcard-rating"><span class="rs">★★★★★</span><span class="rcount">(3)</span></div>
+          <div class="pcard-spec">1.1ct · 18k rose gold · oval</div>
+          <div class="pcard-foot"><span class="pcard-price">$5,600</span><button class="pcard-btn">Add to cart</button></div>
+        </div>
+      </div>
+
+      <div class="pcard">
+        <div class="pcard-img">
+          <button class="pwish" aria-label="Wishlist">♡</button>
+          <svg class="gem-icon" viewBox="0 0 52 52" fill="none" aria-hidden="true"><circle cx="26" cy="26" r="16" fill="#F0EBE0" stroke="#E2DCCE" stroke-width="1.5"/><circle cx="26" cy="26" r="11" fill="#F8F4EE" stroke="#E2DCCE" stroke-width="1"/><circle cx="22" cy="22" r="3" fill="#fff" opacity=".7"/></svg>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-sub">South sea pearl · necklace</div>
+          <div class="pcard-name">Baroque pearl strand</div>
+          <div class="pcard-rating"><span class="rs">★★★★</span><span class="re">★</span><span class="rcount">(11)</span></div>
+          <div class="pcard-spec">10–12mm · 18k yellow gold clasp</div>
+          <div class="pcard-foot"><span class="pcard-price">$1,200</span><button class="pcard-btn">Add to cart</button></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="pagination">
+      <button class="pg-btn">‹</button>
+      <button class="pg-btn on">1</button>
+      <button class="pg-btn">2</button>
+      <button class="pg-btn">3</button>
+      <button class="pg-btn">4</button>
+      <button class="pg-btn">›</button>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+function toggle(row){const cb=row.querySelector('.cb');cb.classList.toggle('on')}
+function clearSection(btn){const sec=btn.closest('.sb-section');sec.querySelectorAll('.cb').forEach(c=>c.classList.remove('on'))}
+function switchPill(el){document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('on'));el.classList.add('on')}
+</script>

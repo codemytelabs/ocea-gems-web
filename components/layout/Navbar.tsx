@@ -5,7 +5,7 @@ import { Search, Heart, ShoppingBag } from 'lucide-react'
 
 const links = [
   { href: '/', label: 'Home' },
-  { href: '/products', label: 'Products' },
+  { href: '/collections', label: 'Collections' },
   { href: '/bespoke', label: 'Bespoke' },
   { href: '/about',   label: 'About' },
   { href: '/contact', label: 'Contact' },
