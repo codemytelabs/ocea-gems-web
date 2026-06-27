@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+/* ── Ocea Gems design tokens ── */
+@theme {
+  /* fonts */
+  --font-heading: var(--font-heading), Georgia, serif;
+  --font-body: var(--font-body), system-ui, sans-serif;
+
+  /* backgrounds */
+  --color-bg: #FAFAF7;
+  --color-surface: #F5F0E8;
+  --color-surface-alt: #F0EBE0;
+  --color-card: #FFFFFF;
+  --color-border: #E2DCCE;
+
+  /* brand gold */
+  --color-gold: #C9A84C;
+  --color-gold-dark: #B8860B;
+  --color-gold-light: #E8C96A;
+  --color-gold-tint: #FFF9EC;
+
+  /* sapphire */
+  --color-sapphire: #1A2B8F;
+  --color-sapphire-lt: #EEF2FF;
+
+  /* nav + footer */
+  --color-navy: #0A0F2C;
+  --color-navy-muted: #3D4F8A;
+  --color-navy-text: #8C9BC4;
+
+  /* text */
+  --color-heading: #1C1610;
+  --color-body: #6B5F4A;
+  --color-muted: #9E9080;
+}
+
+/* ── base styles ── */
+:root {
+  background-color: var(--color-bg);
+}
+
+body {
+  color: var(--color-body);
+  font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  color: var(--color-heading);
+}
+
+/* ── reusable button classes ── */
+.btn-gold {
+  background: var(--color-gold);
+  color: #fff;
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background .2s;
+}
+
+.btn-gold:hover {
+  background: var(--color-gold-dark);
+}
+
+.btn-outline {
+  border: 1px solid var(--color-sapphire);
+  color: var(--color-sapphire);
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  transition: background .2s;
+}
+
+.btn-outline:hover {
+  background: var(--color-sapphire-lt);
+}
