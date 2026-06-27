@@ -166,7 +166,7 @@ export default function HomePage() {
               <div className="relative z-10">
                 <div className="w-48 h-48 rounded-3xl bg-white border-2 border-gold flex items-center justify-center overflow-hidden shadow-2xl">
                   <Image
-                    src="/logo.png"
+                    src="/ocea-logo.png"
                     alt="Ocea Gems International"
                     width={180}
                     height={180}

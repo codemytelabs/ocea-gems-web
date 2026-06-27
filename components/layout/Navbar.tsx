@@ -20,7 +20,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-3 shrink-0">
           <div className="w-10 h-10 rounded-lg border border-border bg-surface flex items-center justify-center overflow-hidden">
             <Image
-              src="/logo.png"
+              src="/ocea-logo.png"
               alt="Ocea Gems"
               width={36}
               height={36}
