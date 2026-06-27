@@ -65,7 +65,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-surface">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-surface via-surface to-white overflow-hidden">
+      <section className="relative bg-linear-to-b from-surface via-surface to-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}

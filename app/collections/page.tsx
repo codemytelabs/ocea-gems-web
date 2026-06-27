@@ -99,12 +99,15 @@ export default function CollectionsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All Jewellery')
   const [sortBy, setSortBy] = useState('featured')
   const [viewMode, setViewMode] = useState('grid')
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<{
+    gems: string[]
+    price: string[]
+  }>({
     gems: [],
     price: [],
   })
 
-  const toggleFilter = (type: string, value: string) => {
+  const toggleFilter = (type: 'gems' | 'price', value: string) => {
     setFilters((prev) => ({
       ...prev,
       [type]: prev[type].includes(value)
