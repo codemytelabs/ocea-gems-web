@@ -1,14 +1,15 @@
-import { Cormorant_Garamond, Inter } from 'next/font/google'
+import { Lora, Inter } from 'next/font/google'
 import Navbar from '@/components/layout/Navbar'
-// import Footer from '@/components/layout/Footer'
+import Footer from '@/components/layout/Footer'
 import './globals.css'
 
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'], weight: ['400','500','600'],
+const lora = Lora({
+  subsets: ['latin'], weight: ['500','600','700'],
   variable: '--font-heading'
 })
 const inter = Inter({
-  subsets: ['latin'], variable: '--font-body'
+  subsets: ['latin'], weight: ['400','500','600','700'],
+  variable: '--font-body'
 })
 
 export const metadata = {
@@ -22,12 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${cormorant.variable} ${inter.variable}
+        className={`${lora.variable} ${inter.variable}
           bg-bg text-body font-body antialiased`}
       >
         <Navbar />
         <main>{children}</main>
-        {/* <Footer /> */}
+        <Footer />
       </body>
     </html>
   )

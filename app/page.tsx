@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import { PHONE_TEL, WHATSAPP_NUMBER } from '@/lib/contact'
 
 // Sample past pieces data
 const pastPieces = [
@@ -66,7 +67,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-surface">
       {/* Hero Section */}
       <section className="relative bg-linear-to-b from-surface via-surface to-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-14 sm:py-24">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="flex flex-col justify-center">
@@ -78,7 +79,7 @@ export default function HomePage() {
               </div>
 
               {/* Main Heading */}
-              <h1 className="font-heading text-5xl lg:text-6xl text-heading font-medium leading-tight mb-6">
+              <h1 className="font-heading text-4xl sm:text-5xl lg:text-6xl text-heading font-medium leading-tight mb-6">
                 Curated <span className="text-gold">gems</span>,<br />
                 crafted for you
               </h1>
@@ -113,9 +114,9 @@ export default function HomePage() {
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 max-w-md mb-8">
                 <a
-                  href="tel:+94771164429"
+                  href={`tel:${PHONE_TEL}`}
                   className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3
-                    rounded-lg bg-gold hover:bg-gold-dark text-white text-sm font-semibold
+                    rounded-lg bg-sapphire hover:bg-sapphire-dark text-white text-sm font-semibold
                     transition-all duration-300 hover:shadow-lg"
                 >
                   <svg
@@ -131,20 +132,14 @@ export default function HomePage() {
                 </a>
 
                 <a
-                  href="https://wa.me/94771164429"
+                  href={`https://wa.me/${WHATSAPP_NUMBER}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3
-                    rounded-lg border-2 border-gold text-gold hover:bg-gold-tint hover:border-gold-dark
+                    rounded-lg border-2 border-whatsapp text-whatsapp-dark hover:bg-whatsapp-tint
                     text-sm font-semibold transition-all duration-300 hover:shadow-lg"
                 >
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-4.946 1.25l-.355.211-.369-.015C8.23 8.288 4.897 5.155 4.897 1.27 4.897.573 5.45 0 6.167 0h2.833c.683 0 1.235.573 1.235 1.27v2.833c0 .697.553 1.27 1.235 1.27h2.833c.683 0 1.235-.573 1.235-1.27V1.27C18.33.573 17.777 0 17.094 0h-2.833c-.683 0-1.235.573-1.235 1.27v2.833c0 .697-.552 1.27-1.235 1.27" />
-                  </svg>
+                  <Image src="/whatsapp-icon.webp" alt="" width={20} height={20} className="w-5 h-5" />
                   Message Us
                 </a>
               </div>
@@ -184,23 +179,6 @@ export default function HomePage() {
               </div>
             </div>
           </div>
-
-          {/* Brand Name Section */}
-          <div className="mt-20 pt-12 border-t border-border">
-            <div className="text-center">
-              <p className="text-xs tracking-[.14em] text-gold-dark uppercase font-semibold mb-1">
-                Ocea Gems International
-              </p>
-              <p className="text-sm text-body mb-6">
-                Established by gemstone enthusiasts passionate about sharing the beauty of authentic gems from Sri Lanka
-              </p>
-              <div className="flex items-center justify-center gap-2 text-xs text-muted">
-                <span>© 2026 Ocea Gems International</span>
-                <span>·</span>
-                <span>🇱🇰 Sri Lanka</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -208,15 +186,15 @@ export default function HomePage() {
       <div className="h-px bg-border" />
 
       {/* Gallery Section - Past Pieces */}
-      <section className="bg-white py-20 px-6">
+      <section className="bg-white py-14 sm:py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-14">
             <p className="text-xs tracking-[.14em] text-gold-dark uppercase font-semibold mb-3">
-              Our Heritage
+              Our Portfolio
             </p>
-            <h2 className="font-heading text-4xl lg:text-5xl text-heading font-medium mb-4">
-              Gallery of Past Creations
+            <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl text-heading font-medium mb-4">
+              Signature Creations
             </h2>
             <p className="text-body text-base max-w-2xl mx-auto leading-relaxed">
               Explore our collection of expertly crafted pieces and bespoke designs from our valued clients. Each creation represents a unique story of artistry and elegance.
@@ -264,7 +242,7 @@ export default function HomePage() {
           <div className="text-center">
             <Link
               href="/collections"
-              className="inline-flex items-center gap-2 px-8 py-3.5 bg-sapphire hover:bg-sapphire text-white
+              className="inline-flex items-center gap-2 px-8 py-3.5 bg-sapphire hover:bg-sapphire-dark text-white
                 text-sm font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105"
             >
               Explore Collections
@@ -286,7 +264,7 @@ export default function HomePage() {
       <div className="h-px bg-border" />
 
       {/* Features Section */}
-      <section className="bg-surface py-20 px-6">
+      <section className="bg-surface py-14 sm:py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center group">

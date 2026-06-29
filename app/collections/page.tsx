@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import Navbar from '@/components/layout/Navbar'
 
 // Sample product data
 const products = [
@@ -81,24 +80,29 @@ const categories = [
   'Earrings',
 ]
 
-const gemTypes = [
-  { label: 'Sapphire', count: 45 },
-  { label: 'Ruby', count: 28 },
-  { label: 'Emerald', count: 19 },
-  { label: 'Diamond', count: 34 },
-]
+const gemTypes = ['Sapphire', 'Ruby', 'Emerald', 'Diamond']
 
-const priceRanges = [
-  { label: 'Under $1,000', count: 12 },
-  { label: '$1,000 - $3,000', count: 28 },
-  { label: '$3,000 - $5,000', count: 31 },
-  { label: 'Over $5,000', count: 35 },
-]
+const priceRanges = ['Under $1,000', '$1,000 - $3,000', '$3,000 - $5,000', 'Over $5,000']
+
+const normalizeCategory = (value: string) => value.toLowerCase().replace(/s$/, '')
+
+const matchesGem = (product: { name: string; spec: string }, gem: string) =>
+  product.name.toLowerCase().includes(gem.toLowerCase()) ||
+  product.spec.toLowerCase().includes(gem.toLowerCase())
+
+const matchesPriceRange = (price: number, range: string) => {
+  if (range === 'Under $1,000') return price < 1000
+  if (range === '$1,000 - $3,000') return price >= 1000 && price <= 3000
+  if (range === '$3,000 - $5,000') return price >= 3000 && price <= 5000
+  if (range === 'Over $5,000') return price > 5000
+  return true
+}
 
 export default function CollectionsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All Jewellery')
   const [sortBy, setSortBy] = useState('featured')
   const [viewMode, setViewMode] = useState('grid')
+  const [filtersOpen, setFiltersOpen] = useState(false)
   const [filters, setFilters] = useState<{
     gems: string[]
     price: string[]
@@ -116,6 +120,33 @@ export default function CollectionsPage() {
     }))
   }
 
+  const filteredProducts = products.filter((p) => {
+    const categoryMatch =
+      selectedCategory === 'All Jewellery' ||
+      normalizeCategory(selectedCategory) === normalizeCategory(p.category)
+    const gemMatch = filters.gems.length === 0 || filters.gems.some((g) => matchesGem(p, g))
+    const priceMatch =
+      filters.price.length === 0 || filters.price.some((r) => matchesPriceRange(p.price, r))
+    return categoryMatch && gemMatch && priceMatch
+  })
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortBy === 'price-low') return a.price - b.price
+    if (sortBy === 'price-high') return b.price - a.price
+    if (sortBy === 'newest') return b.id - a.id
+    return 0
+  })
+
+  const categoryCount = (cat: string) =>
+    cat === 'All Jewellery'
+      ? products.length
+      : products.filter((p) => normalizeCategory(cat) === normalizeCategory(p.category)).length
+
+  const gemCount = (gem: string) => products.filter((p) => matchesGem(p, gem)).length
+
+  const priceCount = (range: string) =>
+    products.filter((p) => matchesPriceRange(p.price, range)).length
+
   const badgeStyles: any = {
     new: 'bg-sapphire-lt text-sapphire border border-sapphire',
     sale: 'bg-red-50 text-red-700 border border-red-200',
@@ -125,7 +156,7 @@ export default function CollectionsPage() {
   return (
     <div className="min-h-screen bg-surface">
       {/* Breadcrumb */}
-      <div className="border-b border-border px-6 py-2.5 bg-white">
+      <div className="border-b border-border px-4 sm:px-6 py-2.5 bg-white">
         <div className="max-w-7xl mx-auto flex items-center gap-2 text-xs text-muted">
           <span>Home</span>
           <span className="text-border">›</span>
@@ -133,16 +164,32 @@ export default function CollectionsPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-6 flex gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col lg:flex-row gap-8 lg:gap-10">
         {/* Sidebar Filters */}
-        <div className="w-48 flex-shrink-0">
+        <div className="w-full lg:w-48 lg:shrink-0">
+          {/* Mobile filters toggle */}
+          <button
+            onClick={() => setFiltersOpen((v) => !v)}
+            className="lg:hidden w-full flex items-center justify-between px-4 py-2.5 mb-4
+              border border-border rounded-lg text-sm font-medium text-navy bg-white"
+          >
+            Filters
+            <span className="text-xs text-muted">{filtersOpen ? '▲' : '▼'}</span>
+          </button>
+
+          <div className={`${filtersOpen ? 'block' : 'hidden'} lg:block`}>
           {/* Category Filter */}
-          <div className="mb-5 pb-5 border-b border-border">
+          <div className="mb-6 pb-6 border-b border-border">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-xs font-bold text-navy uppercase tracking-widest">
                 Category
               </h3>
-              <button className="text-xs text-gold hover:text-gold-dark">Clear</button>
+              <button
+                onClick={() => setSelectedCategory('All Jewellery')}
+                className="text-xs text-gold hover:text-gold-dark"
+              >
+                Clear
+              </button>
             </div>
             <div className="space-y-2">
               {categories.map((cat) => (
@@ -172,7 +219,7 @@ export default function CollectionsPage() {
                   </div>
                   <span className="text-xs text-body flex-1">{cat}</span>
                   <span className="text-xs bg-sapphire-lt text-sapphire px-1.5 py-0.5 rounded">
-                    {28}
+                    {categoryCount(cat)}
                   </span>
                 </div>
               ))}
@@ -180,25 +227,25 @@ export default function CollectionsPage() {
           </div>
 
           {/* Gem Type Filter */}
-          <div className="mb-5 pb-5 border-b border-border">
+          <div className="mb-6 pb-6 border-b border-border">
             <h3 className="text-xs font-bold text-navy uppercase tracking-widest mb-3">
               Gem Type
             </h3>
             <div className="space-y-2">
               {gemTypes.map((gem) => (
                 <div
-                  key={gem.label}
-                  onClick={() => toggleFilter('gems', gem.label)}
+                  key={gem}
+                  onClick={() => toggleFilter('gems', gem)}
                   className="flex items-center gap-2 cursor-pointer"
                 >
                   <div
                     className={`w-3.5 h-3.5 rounded border-1.5 flex items-center justify-center transition-all ${
-                      filters.gems.includes(gem.label)
+                      filters.gems.includes(gem)
                         ? 'bg-sapphire border-sapphire'
                         : 'border-sapphire-lt bg-sapphire-lt'
                     }`}
                   >
-                    {filters.gems.includes(gem.label) && (
+                    {filters.gems.includes(gem) && (
                       <svg
                         className="w-2 h-2 text-white"
                         viewBox="0 0 10 10"
@@ -210,9 +257,9 @@ export default function CollectionsPage() {
                       </svg>
                     )}
                   </div>
-                  <span className="text-xs text-body flex-1">{gem.label}</span>
+                  <span className="text-xs text-body flex-1">{gem}</span>
                   <span className="text-xs bg-sapphire-lt text-sapphire px-1.5 py-0.5 rounded">
-                    {gem.count}
+                    {gemCount(gem)}
                   </span>
                 </div>
               ))}
@@ -227,18 +274,18 @@ export default function CollectionsPage() {
             <div className="space-y-2">
               {priceRanges.map((range) => (
                 <div
-                  key={range.label}
-                  onClick={() => toggleFilter('price', range.label)}
+                  key={range}
+                  onClick={() => toggleFilter('price', range)}
                   className="flex items-center gap-2 cursor-pointer"
                 >
                   <div
                     className={`w-3.5 h-3.5 rounded border-1.5 flex items-center justify-center transition-all ${
-                      filters.price.includes(range.label)
+                      filters.price.includes(range)
                         ? 'bg-sapphire border-sapphire'
                         : 'border-sapphire-lt bg-sapphire-lt'
                     }`}
                   >
-                    {filters.price.includes(range.label) && (
+                    {filters.price.includes(range) && (
                       <svg
                         className="w-2 h-2 text-white"
                         viewBox="0 0 10 10"
@@ -250,20 +297,21 @@ export default function CollectionsPage() {
                       </svg>
                     )}
                   </div>
-                  <span className="text-xs text-body flex-1">{range.label}</span>
+                  <span className="text-xs text-body flex-1">{range}</span>
                   <span className="text-xs bg-sapphire-lt text-sapphire px-1.5 py-0.5 rounded">
-                    {range.count}
+                    {priceCount(range)}
                   </span>
                 </div>
               ))}
             </div>
+          </div>
           </div>
         </div>
 
         {/* Main Content */}
         <div className="flex-1 min-w-0">
           {/* Page Header */}
-          <div className="mb-6 pb-4 border-b border-border">
+          <div className="mb-8 pb-5 border-b border-border">
             <h1 className="text-2xl font-semibold text-navy font-serif mb-1">
               Collections
             </h1>
@@ -273,7 +321,7 @@ export default function CollectionsPage() {
           </div>
 
           {/* Category Pills */}
-          <div className="flex gap-2 mb-5 flex-wrap">
+          <div className="flex gap-2 mb-6 flex-wrap">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -291,7 +339,7 @@ export default function CollectionsPage() {
 
           {/* Active Filters */}
           {(filters.gems.length > 0 || filters.price.length > 0) && (
-            <div className="flex items-center gap-2 mb-5 flex-wrap">
+            <div className="flex items-center gap-2 mb-6 flex-wrap">
               <span className="text-xs text-muted font-medium">Active filters:</span>
               {filters.gems.map((gem) => (
                 <div
@@ -325,9 +373,9 @@ export default function CollectionsPage() {
           )}
 
           {/* Toolbar */}
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-border">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-8 pb-5 border-b border-border">
             <div className="text-xs text-muted">
-              Showing <span className="font-semibold text-navy">{products.length}</span> items
+              Showing <span className="font-semibold text-navy">{sortedProducts.length}</span> items
             </div>
             <div className="flex gap-3 items-center">
               <select
@@ -345,7 +393,7 @@ export default function CollectionsPage() {
                   onClick={() => setViewMode('grid')}
                   className={`w-8 h-8 rounded flex items-center justify-center text-xs font-medium transition-all ${
                     viewMode === 'grid'
-                      ? 'bg-sapphire border border-sapphire text-white'
+                      ? 'bg-sapphire border border-sapphire text-white hover:bg-sapphire-dark'
                       : 'border border-border text-muted bg-white hover:border-sapphire hover:text-sapphire'
                   }`}
                   title="Grid view"
@@ -356,7 +404,7 @@ export default function CollectionsPage() {
                   onClick={() => setViewMode('list')}
                   className={`w-8 h-8 rounded flex items-center justify-center text-xs font-medium transition-all ${
                     viewMode === 'list'
-                      ? 'bg-sapphire border border-sapphire text-white'
+                      ? 'bg-sapphire border border-sapphire text-white hover:bg-sapphire-dark'
                       : 'border border-border text-muted bg-white hover:border-sapphire hover:text-sapphire'
                   }`}
                   title="List view"
@@ -368,8 +416,14 @@ export default function CollectionsPage() {
           </div>
 
           {/* Product Grid */}
-          <div className="grid grid-cols-3 gap-4 mb-8">
-            {products.map((product) => (
+          {sortedProducts.length === 0 ? (
+            <div className="text-center py-16 mb-8 border border-dashed border-border rounded-lg">
+              <p className="text-sm text-body mb-1">No pieces match these filters.</p>
+              <p className="text-xs text-muted">Try clearing a filter to see more results.</p>
+            </div>
+          ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+            {sortedProducts.map((product) => (
               <div
                 key={product.id}
                 className="bg-white border border-border rounded-lg overflow-hidden hover:border-sapphire hover:shadow-lg transition-all cursor-pointer group"
@@ -427,7 +481,7 @@ export default function CollectionsPage() {
                     <span className="text-sm font-bold text-gold-dark">
                       ${product.price.toLocaleString()}
                     </span>
-                    <button className="px-3 py-1.5 bg-sapphire hover:bg-sapphire text-white text-xs font-medium rounded-lg transition-colors">
+                    <button className="px-3 py-1.5 bg-sapphire hover:bg-sapphire-dark text-white text-xs font-medium rounded-lg transition-colors">
                       Add
                     </button>
                   </div>
@@ -435,6 +489,7 @@ export default function CollectionsPage() {
               </div>
             ))}
           </div>
+          )}
 
           {/* Pagination */}
           <div className="flex gap-1 justify-center">
@@ -443,7 +498,7 @@ export default function CollectionsPage() {
                 key={i}
                 className={`w-8 h-8 rounded text-xs font-medium flex items-center justify-center transition-all ${
                   i === 0
-                    ? 'bg-sapphire border border-sapphire text-white'
+                    ? 'bg-sapphire border border-sapphire text-white hover:bg-sapphire-dark'
                     : 'border border-border text-body bg-white hover:border-sapphire hover:text-sapphire hover:bg-sapphire-lt'
                 }`}
               >
