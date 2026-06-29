@@ -1,6 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import { Heart, Search, X } from 'lucide-react'
+import { useWishlist } from '@/lib/useWishlist'
+import { useCart, openCart } from '@/lib/useCart'
 
 // Sample product data
 const products = [
@@ -98,11 +103,18 @@ const matchesPriceRange = (price: number, range: string) => {
   return true
 }
 
-export default function CollectionsPage() {
+function CollectionsContent() {
+  const searchParams = useSearchParams()
+  const showWishlistOnly = searchParams.get('wishlist') === '1'
+  const wishlist = useWishlist()
+  const cart = useCart()
+
   const [selectedCategory, setSelectedCategory] = useState('All Jewellery')
   const [sortBy, setSortBy] = useState('featured')
   const [viewMode, setViewMode] = useState('grid')
   const [filtersOpen, setFiltersOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') || '')
+  const [currentPage, setCurrentPage] = useState(1)
   const [filters, setFilters] = useState<{
     gems: string[]
     price: string[]
@@ -110,6 +122,18 @@ export default function CollectionsPage() {
     gems: [],
     price: [],
   })
+
+  const itemsPerPage = 3
+
+  // keep the search box in sync when arriving via a Navbar search (?q=...)
+  useEffect(() => {
+    setSearchQuery(searchParams.get('q') || '')
+  }, [searchParams])
+
+  // any change to the result set should bring the user back to page 1
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedCategory, filters, searchQuery, showWishlistOnly, sortBy])
 
   const toggleFilter = (type: 'gems' | 'price', value: string) => {
     setFilters((prev) => ({
@@ -127,7 +151,13 @@ export default function CollectionsPage() {
     const gemMatch = filters.gems.length === 0 || filters.gems.some((g) => matchesGem(p, g))
     const priceMatch =
       filters.price.length === 0 || filters.price.some((r) => matchesPriceRange(p.price, r))
-    return categoryMatch && gemMatch && priceMatch
+    const searchMatch =
+      !searchQuery.trim() ||
+      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.spec.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.category.toLowerCase().includes(searchQuery.toLowerCase())
+    const wishlistMatch = !showWishlistOnly || wishlist.has(p.id)
+    return categoryMatch && gemMatch && priceMatch && searchMatch && wishlistMatch
   })
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -136,6 +166,13 @@ export default function CollectionsPage() {
     if (sortBy === 'newest') return b.id - a.id
     return 0
   })
+
+  const totalPages = Math.max(1, Math.ceil(sortedProducts.length / itemsPerPage))
+  const activePage = Math.min(currentPage, totalPages)
+  const pageProducts = sortedProducts.slice(
+    (activePage - 1) * itemsPerPage,
+    activePage * itemsPerPage
+  )
 
   const categoryCount = (cat: string) =>
     cat === 'All Jewellery'
@@ -311,13 +348,40 @@ export default function CollectionsPage() {
         {/* Main Content */}
         <div className="flex-1 min-w-0">
           {/* Page Header */}
-          <div className="mb-8 pb-5 border-b border-border">
-            <h1 className="text-2xl font-semibold text-navy font-serif mb-1">
-              Collections
-            </h1>
-            <p className="text-sm text-body">
-              Discover our curated collection of certified gems and bespoke jewellery
-            </p>
+          <div className="mb-8 pb-5 border-b border-border flex items-start justify-between gap-4 flex-wrap">
+            <div>
+              <h1 className="text-2xl font-semibold text-navy font-serif mb-1">
+                {showWishlistOnly ? 'Your Wishlist' : 'Collections'}
+              </h1>
+              <p className="text-sm text-body">
+                {showWishlistOnly
+                  ? 'Pieces you have saved for later'
+                  : 'Discover our curated collection of certified gems and bespoke jewellery'}
+              </p>
+            </div>
+            {showWishlistOnly && (
+              <Link
+                href="/collections"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-body
+                  border border-border rounded-lg bg-white hover:border-sapphire hover:text-sapphire transition-colors"
+              >
+                <X size={14} />
+                Exit Wishlist View
+              </Link>
+            )}
+          </div>
+
+          {/* Search */}
+          <div className="relative mb-6 max-w-sm">
+            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by name, gem or category..."
+              className="w-full pl-10 pr-3.5 py-2.5 text-sm border border-border rounded-lg bg-white
+                focus:outline-none focus:border-sapphire focus:ring-1 focus:ring-sapphire transition-colors"
+            />
           </div>
 
           {/* Category Pills */}
@@ -375,7 +439,12 @@ export default function CollectionsPage() {
           {/* Toolbar */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-8 pb-5 border-b border-border">
             <div className="text-xs text-muted">
-              Showing <span className="font-semibold text-navy">{sortedProducts.length}</span> items
+              Showing{' '}
+              <span className="font-semibold text-navy">
+                {sortedProducts.length === 0 ? 0 : (activePage - 1) * itemsPerPage + 1}
+                {pageProducts.length > 1 && `-${(activePage - 1) * itemsPerPage + pageProducts.length}`}
+              </span>{' '}
+              of <span className="font-semibold text-navy">{sortedProducts.length}</span> items
             </div>
             <div className="flex gap-3 items-center">
               <select
@@ -418,12 +487,18 @@ export default function CollectionsPage() {
           {/* Product Grid */}
           {sortedProducts.length === 0 ? (
             <div className="text-center py-16 mb-8 border border-dashed border-border rounded-lg">
-              <p className="text-sm text-body mb-1">No pieces match these filters.</p>
-              <p className="text-xs text-muted">Try clearing a filter to see more results.</p>
+              <p className="text-sm text-body mb-1">
+                {showWishlistOnly ? 'Your wishlist is empty.' : 'No pieces match these filters.'}
+              </p>
+              <p className="text-xs text-muted">
+                {showWishlistOnly
+                  ? 'Tap the heart on any piece to save it here.'
+                  : 'Try clearing a filter to see more results.'}
+              </p>
             </div>
           ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-            {sortedProducts.map((product) => (
+            {pageProducts.map((product) => (
               <div
                 key={product.id}
                 className="bg-white border border-border rounded-lg overflow-hidden hover:border-sapphire hover:shadow-lg transition-all cursor-pointer group"
@@ -444,8 +519,15 @@ export default function CollectionsPage() {
                   </div>
 
                   {/* Wishlist */}
-                  <button className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white border border-border flex items-center justify-center hover:border-sapphire hover:text-sapphire hover:bg-sapphire-lt transition-all opacity-0 group-hover:opacity-100">
-                    ♡
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      wishlist.toggle(product.id)
+                    }}
+                    aria-label={wishlist.has(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+                    className="absolute top-3 right-3 w-7 h-7 rounded-full bg-white border border-ruby text-ruby flex items-center justify-center transition-all hover:bg-ruby/10"
+                  >
+                    <Heart size={14} fill={wishlist.has(product.id) ? 'currentColor' : 'none'} />
                   </button>
                 </div>
 
@@ -481,7 +563,19 @@ export default function CollectionsPage() {
                     <span className="text-sm font-bold text-gold-dark">
                       ${product.price.toLocaleString()}
                     </span>
-                    <button className="px-3 py-1.5 bg-sapphire hover:bg-sapphire-dark text-white text-xs font-medium rounded-lg transition-colors">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        cart.add({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          image: product.image,
+                        })
+                        openCart()
+                      }}
+                      className="px-3 py-1.5 bg-sapphire hover:bg-sapphire-dark text-white text-xs font-medium rounded-lg transition-colors"
+                    >
                       Add
                     </button>
                   </div>
@@ -492,22 +586,51 @@ export default function CollectionsPage() {
           )}
 
           {/* Pagination */}
-          <div className="flex gap-1 justify-center">
-            {Array.from({ length: 5 }).map((_, i) => (
+          {totalPages > 1 && (
+            <div className="flex gap-1 justify-center">
               <button
-                key={i}
-                className={`w-8 h-8 rounded text-xs font-medium flex items-center justify-center transition-all ${
-                  i === 0
-                    ? 'bg-sapphire border border-sapphire text-white hover:bg-sapphire-dark'
-                    : 'border border-border text-body bg-white hover:border-sapphire hover:text-sapphire hover:bg-sapphire-lt'
-                }`}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={activePage === 1}
+                className="w-8 h-8 rounded text-xs font-medium flex items-center justify-center transition-all
+                  border border-border text-body bg-white hover:border-sapphire hover:text-sapphire hover:bg-sapphire-lt
+                  disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-border disabled:hover:text-body disabled:hover:bg-white"
               >
-                {i + 1}
+                ‹
               </button>
-            ))}
-          </div>
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`w-8 h-8 rounded text-xs font-medium flex items-center justify-center transition-all ${
+                    activePage === i + 1
+                      ? 'bg-sapphire border border-sapphire text-white hover:bg-sapphire-dark'
+                      : 'border border-border text-body bg-white hover:border-sapphire hover:text-sapphire hover:bg-sapphire-lt'
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={activePage === totalPages}
+                className="w-8 h-8 rounded text-xs font-medium flex items-center justify-center transition-all
+                  border border-border text-body bg-white hover:border-sapphire hover:text-sapphire hover:bg-sapphire-lt
+                  disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-border disabled:hover:text-body disabled:hover:bg-white"
+              >
+                ›
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CollectionsPage() {
+  return (
+    <Suspense fallback={null}>
+      <CollectionsContent />
+    </Suspense>
   )
 }

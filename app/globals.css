@@ -34,6 +34,10 @@
   --color-whatsapp-dark: #1DA851;
   --color-whatsapp-tint: #E9F9EF;
 
+  /* ruby accent — wishlist / heart states only */
+  --color-ruby: #E0203D;
+  --color-ruby-dark: #B81530;
+
   /* text */
   --color-heading: #0F1A40;
   --color-body: #4B5573;
