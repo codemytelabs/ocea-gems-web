@@ -6,50 +6,62 @@
   --font-heading: var(--font-heading), Georgia, serif;
   --font-body: var(--font-body), system-ui, sans-serif;
 
-  /* backgrounds */
-  --color-bg: #FAFAF7;
-  --color-surface: #F5F0E8;
-  --color-surface-alt: #F0EBE0;
+  /* backgrounds — cool, neutral, let the blue/gold accents carry the brand */
+  --color-bg: #FFFFFF;
+  --color-surface: #F4F6FA;
+  --color-surface-alt: #EAEFF8;
   --color-card: #FFFFFF;
-  --color-border: #E2DCCE;
+  --color-border: #DDE4F0;
 
-  /* brand gold */
-  --color-gold: #C9A84C;
-  --color-gold-dark: #B8860B;
-  --color-gold-light: #E8C96A;
-  --color-gold-tint: #FFF9EC;
+  /* brand gold — accent only, used sparingly */
+  --color-gold: #C9A227;
+  --color-gold-dark: #A3801C;
+  --color-gold-light: #DFC169;
+  --color-gold-tint: #FBF6E9;
 
-  /* sapphire */
+  /* sapphire — primary brand colour, matches the gem in the logo */
   --color-sapphire: #1A2B8F;
-  --color-sapphire-lt: #EEF2FF;
+  --color-sapphire-dark: #101F66;
+  --color-sapphire-lt: #EBEFFB;
 
   /* nav + footer */
-  --color-navy: #0A0F2C;
-  --color-navy-muted: #3D4F8A;
-  --color-navy-text: #8C9BC4;
+  --color-navy: #0B1438;
+  --color-navy-muted: #33437D;
+  --color-navy-text: #9FACD2;
+
+  /* whatsapp accent (chat CTA only) */
+  --color-whatsapp: #25D366;
+  --color-whatsapp-dark: #1DA851;
+  --color-whatsapp-tint: #E9F9EF;
+
+  /* ruby accent — wishlist / heart states only */
+  --color-ruby: #E0203D;
+  --color-ruby-dark: #B81530;
 
   /* text */
-  --color-heading: #1C1610;
-  --color-body: #6B5F4A;
-  --color-muted: #9E9080;
+  --color-heading: #0F1A40;
+  --color-body: #4B5573;
+  --color-muted: #8891A8;
 }
 
 /* ── base styles ── */
-:root {
-  background-color: var(--color-bg);
-}
+@layer base {
+  :root {
+    background-color: var(--color-bg);
+  }
 
-body {
-  color: var(--color-body);
-  font-family: var(--font-body);
-}
+  body {
+    color: var(--color-body);
+    font-family: var(--font-body);
+  }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-heading);
-  color: var(--color-heading);
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    color: var(--color-heading);
+  }
 }
 
 /* ── reusable button classes ── */
@@ -76,4 +88,17 @@ h4 {
 
 .btn-outline:hover {
   background: var(--color-sapphire-lt);
+}
+
+.btn-sapphire {
+  background: var(--color-sapphire);
+  color: #fff;
+  padding: 0.6rem 1.4rem;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background .2s;
+}
+
+.btn-sapphire:hover {
+  background: var(--color-sapphire-dark);
 }

@@ -83,7 +83,7 @@ export default function ProductCard({ product }: { product: Product }) {
               </p>
             )}
           </div>
-          <button className="p-1.5 bg-sapphire hover:bg-sapphire text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center">
+          <button className="p-1.5 bg-sapphire hover:bg-sapphire-dark text-white rounded-lg text-xs font-semibold transition-colors flex items-center justify-center">
             <ShoppingBag size={14} />
           </button>
         </div>
